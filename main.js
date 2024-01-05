@@ -2,13 +2,14 @@ const gameBoard = (function () {
     const board = ["0", "0", "0", "0", "0", "0", "0", "0", "0"];
     const display = () => {
         let text = ""
-        text += "-------\n"
         for (let index = 0; index < board.length; index++) {
             const element = board[index];
             if((index + 1) % 3 != 0) {
-                text += `${board[index]} |`
+                text += ` ${board[index]} |`
+            } else if(index + 1 == board.length) {
+                text += ` ${board[index]}`
             } else {
-                text += `${board[index]}\n-------\n`
+                text += ` ${board[index]}\n-----------\n`
             }
         }
         return text;
@@ -28,3 +29,5 @@ const gameBoard = (function () {
 
     return {display, mark, checkWinner};
 })();
+
+console.log(gameBoard.display())
