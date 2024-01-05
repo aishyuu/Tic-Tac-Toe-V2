@@ -23,11 +23,7 @@ const gameBoard = (function () {
         }
     };
 
-    const checkWinner = (player) => {
-        console.log(player.getMarker());
-    };
-
-    return {display, mark, checkWinner};
+    return {display, mark};
 })();
 
 function createPlayer(marker) {
@@ -37,3 +33,21 @@ function createPlayer(marker) {
     const getMarker = () => marker;
     return {getWins, increaseWins, getMarker}
 }
+
+const playGame = (function () {
+    const playerOne = createPlayer("X");
+    const playerTwo = createPlayer("O");
+
+    const playRound = (gameBoard) => {
+        gameBoard.mark(4, playerOne);
+        checkWinner(gameBoard, playerOne);
+    }
+
+    const checkWinner = (gameBoard, player) => {
+        console.log(player.getMarker());
+    };
+
+    return {playRound}
+})();
+
+playGame.playRound(gameBoard)
