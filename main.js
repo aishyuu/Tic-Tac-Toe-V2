@@ -15,19 +15,22 @@ const gameBoard = (function () {
         return text;
     }
 
-    const mark = (index, marker) => {
+    const mark = (index, player) => {
         if(board[index] != "0") {
             console.log("That position already has a marker");
         } else {
-            board[index] = marker;
+            board[index] = player.getMarker();
         }
     };
 
-    const checkWinner = (marker) => {
-        console.log("Checking if marker is a winner.");
+    const checkWinner = (player) => {
+        console.log(player.getMarker());
     };
 
     return {display, mark, checkWinner};
 })();
 
-console.log(gameBoard.display())
+function createPlayer(marker) {
+    const getMarker = () => marker
+    return {getMarker}
+}
