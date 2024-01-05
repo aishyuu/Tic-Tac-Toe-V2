@@ -31,6 +31,9 @@ const gameBoard = (function () {
 })();
 
 function createPlayer(marker) {
-    const getMarker = () => marker
-    return {getMarker}
+    let wins = 0;
+    const getWins = () => wins;
+    const increaseWins = () => wins++;
+    const getMarker = () => marker;
+    return {getWins, increaseWins, getMarker}
 }
