@@ -11,33 +11,45 @@ const game = (function () {
     let whoIsPlaying = 1;
     const playerOne = createPlayer("X");
     const playerTwo = createPlayer("O");
+    const gameConditionText = document.querySelector('.game-condition > h1');
 
     // Creates the board
     const createBoard = () => {
         const contentDiv = document.querySelector(".game-content");
-        
+        gameConditionText.innerText = "X's turn"
         for (let index = 0; index < 9; index++) {
             const gameBox = document.createElement("div");
             gameBox.addEventListener('click', () => {
-                let player
-                if(whoIsPlaying === 1) {
-                    player = playerOne
-                } else {
-                    player = playerTwo
+                if(board[index] === 0) {
+                    let player
+                    if(whoIsPlaying === 1) {
+                        player = playerOne
+                    } else {
+                        player = playerTwo
+                    }
+                    markBoard(gameBox, player);
+                    board[index] = player.getMarker();
+                    whoIsPlaying = (whoIsPlaying == 1 ? 2 : 1);
+                    gameConditionText.innerText = (whoIsPlaying == 1 ? "X's turn" : "O's turn")
+                    if(!checkWin(board, player)) {
+                        if(checkDraw(board)) {
+                            contentDiv.classList.add('game-concluded')
+                            gameConditionText.innerText = "Draw!"
+                        }
+                    } else {
+                        gameConditionText.innerText = `${player.getMarker()} wins!`
+                        contentDiv.classList.add('game-concluded')
+                    }
                 }
-                markBoard(gameBox, player);
-                board[index] = player.getMarker();
-                whoIsPlaying = (whoIsPlaying == 1 ? 2 : 1);
-                console.log(checkWin(board, player))
             })
             gameBox.classList.add("game-box");
             contentDiv.appendChild(gameBox);
         }
-        createReset();
+        createReset(contentDiv);
     }
 
     // Creates Reset Button
-    const createReset = () => {
+    const createReset = (contentDiv) => {
         const resetDiv = document.querySelector('.reset-content');
 
         const resetButton = document.createElement("button");
@@ -46,9 +58,12 @@ const game = (function () {
         resetButton.addEventListener('click', () => {
             const allBoxes = document.querySelectorAll(".game-box");
             for (let index = 0; index < allBoxes.length; index++) {
-                allBoxes[index].innerHTML = ``
-                board[index] = 0
+                allBoxes[index].innerHTML = ``;
+                board[index] = 0;
             }
+            whoIsPlaying = 1;
+            gameConditionText.innerText = "X's turn";
+            contentDiv.classList.remove('game-concluded')
         })
 
         resetDiv.appendChild(resetButton);
@@ -66,8 +81,12 @@ const game = (function () {
         return false
     }
 
-    const checkDraw = () => {
-
+    const checkDraw = (board) => {
+        if(board.includes(0)) {
+            return false;
+        } else {
+            return true
+        }
     }
 
     const markBoard = (square, player) => {

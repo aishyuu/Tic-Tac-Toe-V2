@@ -106,3 +106,15 @@ table {
 .reset-button:hover {
     background-color: rgb(150, 150, 150);
 }
+
+.game-condition > h1 {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.game-concluded {
+    pointer-events: none;
+}
