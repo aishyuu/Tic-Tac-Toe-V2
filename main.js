@@ -1,16 +1,19 @@
-function createPlayer(marker) {
-    const getMarker = () => marker;
-    let wins = 0;
-    const wonGame = () => wins++;
-    const getWins = () => wins;
-    return { getMarker, getWins, wonGame }
+class Player {
+    #mark
+    constructor(marker) {
+        this.#mark = marker
+    }
+
+    getMarker() {
+        return this.#mark
+    }
 }
 
 const game = (function () {
     const board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     let whoIsPlaying = 1;
-    const playerOne = createPlayer("X");
-    const playerTwo = createPlayer("O");
+    const playerOne = new Player("X");
+    const playerTwo = new Player("O");
     const gameConditionText = document.querySelector('.game-condition > h1');
 
     // Creates the board
