@@ -9,38 +9,45 @@ class Player {
     }
 }
 
-const game = (function () {
-    const board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let whoIsPlaying = 1;
-    const playerOne = new Player("X");
-    const playerTwo = new Player("O");
-    const gameConditionText = document.querySelector('.game-condition > h1');
+class Game {
+    #board
+    #whoIsPlaying
+    #playerOne
+    #playerTwo
+    #gameConditionText
 
-    // Creates the board
-    const createBoard = () => {
+    constructor() {
+        this.#board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.#whoIsPlaying = 1;
+        this.#playerOne = new Player("X");
+        this.#playerTwo = new Player("O");
+        this.#gameConditionText = document.querySelector('.game-condition > h1');
+    }
+
+    createBoard() {
         const contentDiv = document.querySelector(".game-content");
-        gameConditionText.innerText = "X's turn"
+        this.#gameConditionText.innerText = "X's turn"
         for (let index = 0; index < 9; index++) {
             const gameBox = document.createElement("div");
             gameBox.addEventListener('click', () => {
-                if(board[index] === 0) {
+                if(this.#board[index] === 0) {
                     let player
-                    if(whoIsPlaying === 1) {
-                        player = playerOne
+                    if(this.#whoIsPlaying === 1) {
+                        player = this.#playerOne
                     } else {
-                        player = playerTwo
+                        player = this.#playerTwo
                     }
-                    markBoard(gameBox, player);
-                    board[index] = player.getMarker();
-                    whoIsPlaying = (whoIsPlaying == 1 ? 2 : 1);
-                    gameConditionText.innerText = (whoIsPlaying == 1 ? "X's turn" : "O's turn")
-                    if(!checkWin(board, player)) {
-                        if(checkDraw(board)) {
+                    this.markBoard(gameBox, player);
+                    this.#board[index] = player.getMarker();
+                    this.#whoIsPlaying = (this.#whoIsPlaying == 1 ? 2 : 1);
+                    this.#gameConditionText.innerText = (this.#whoIsPlaying == 1 ? "X's turn" : "O's turn")
+                    if(!this.checkWin(this.#board, player)) {
+                        if(this.checkDraw(this.#board)) {
                             contentDiv.classList.add('game-concluded')
-                            gameConditionText.innerText = "Draw!"
+                            this.#gameConditionText.innerText = "Draw!"
                         }
                     } else {
-                        gameConditionText.innerText = `${player.getMarker()} wins!`
+                        this.#gameConditionText.innerText = `${player.getMarker()} wins!`
                         contentDiv.classList.add('game-concluded')
                     }
                 }
@@ -48,11 +55,10 @@ const game = (function () {
             gameBox.classList.add("game-box");
             contentDiv.appendChild(gameBox);
         }
-        createReset(contentDiv);
+        this.createReset(contentDiv);
     }
 
-    // Creates Reset Button
-    const createReset = (contentDiv) => {
+    createReset(contentDiv) {
         const resetDiv = document.querySelector('.reset-content');
 
         const resetButton = document.createElement("button");
@@ -62,17 +68,17 @@ const game = (function () {
             const allBoxes = document.querySelectorAll(".game-box");
             for (let index = 0; index < allBoxes.length; index++) {
                 allBoxes[index].innerHTML = ``;
-                board[index] = 0;
+                this.#board[index] = 0;
             }
-            whoIsPlaying = 1;
-            gameConditionText.innerText = "X's turn";
+            this.#whoIsPlaying = 1;
+            this.#gameConditionText.innerText = "X's turn";
             contentDiv.classList.remove('game-concluded')
         })
 
         resetDiv.appendChild(resetButton);
     }
 
-    const checkWin = (board, player) => {
+    checkWin(board, player) {
         const winConditions = ['036', '147', '258', '012', '345', '678', '048', '246'];
         const marker= player.getMarker();
         for (let index = 0; index < winConditions.length; index++) {
@@ -84,24 +90,22 @@ const game = (function () {
         return false
     }
 
-    const checkDraw = (board) => {
+    checkDraw(board) {
         if(board.includes(0)) {
-            return false;
-        } else {
-            return true
+            return false
         }
+        return true
     }
 
-    const markBoard = (square, player) => {
+    markBoard(square, player) {
         square.innerHTML = `<h1>${player.getMarker()}</h1>`
     }
 
-    const playGame = () => {
-        createBoard();
+    playGame() {
+        this.createBoard();
     }
+}
 
+const gameClass = new Game();
 
-    return {playGame}
-})()
-
-game.playGame();
+gameClass.playGame();
